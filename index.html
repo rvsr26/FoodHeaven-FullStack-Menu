@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizza Heaven | Account</title>
+    <link rel="stylesheet" href="css/signin.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <style>
+        /* Added simple style for the guest button to differentiate it */
+        .guest-btn {
+            background-color: #6c757d; /* Gray color */
+            margin-top: 10px;
+        }
+        .guest-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="forms-container">
+            <div class="signin-signup">
+                
+                <form action="#" class="sign-in-form" id="login-form">
+                    <h2 class="title">Sign in</h2>
+                    <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" placeholder="Email" id="signin-email" required /> 
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="Password" id="signin-password" required />
+                    </div>
+                    <input type="submit" value="Login" class="btn solid" />
+                    
+                    <button type="button" class="btn guest-btn" id="guest-btn-signin">Continue as Guest</button>
+
+                    <p class="social-text">Or sign in with Google</p>
+                    
+                    <div id="g_id_onload"
+                        data-client_id="YOUR_GOOGLE_CLIENT_ID" 
+                        data-context="signin" 
+                        data-ux_mode="popup"
+                        data-callback="handleGoogleLogin"
+                        data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-shape="rectangular"
+                        data-theme="outline"
+                        data-text="signin_with"
+                        data-size="large"
+                        data-logo_alignment="left">
+                    </div>
+                </form>
+
+                <form action="#" class="sign-up-form" id="signup-form">
+                    <h2 class="title">Sign up</h2>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="Username (Optional)" id="signup-username" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" placeholder="Email" id="signup-email" required />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="Password (min 6 chars)" id="signup-password" required />
+                    </div>
+                    <input type="submit" class="btn" value="Sign up" />
+                    
+                    <button type="button" class="btn guest-btn" id="guest-btn-signup">Continue as Guest</button>
+                    
+                    <p class="social-text">Or sign up with Google</p>
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-shape="rectangular"
+                        data-theme="outline"
+                        data-text="signup_with"
+                        data-size="large"
+                        data-logo_alignment="left">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panels-container">
+            <div class="panel left-panel">
+                <div class="content">
+                    <h3>New here?</h3>
+                    <p>Join Pizza Heaven today to order delicious meals and track your delivery instantly.</p>
+                    <button class="btn transparent" id="sign-up-btn">Sign up</button>
+                </div>
+            </div>
+            <div class="panel right-panel">
+                <div class="content">
+                    <h3>One of us?</h3>
+                    <p>Welcome back! Sign in to access your cart, previous orders, and exclusive deals.</p>
+                    <button class="btn transparent" id="sign-in-btn">Sign in</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    
+    <script type="module" src="js/firebase_config.js"></script> 
+    <script type="module" src="js/signin.js"></script>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Menu & Order Management</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+   /* --- GLOBAL STYLES (More Vibrant Palette) --- */
+:root {
+    /* Color Palette */
+    --primary: #ff6b6b; /* Bright Coral/Red (Attention/Add) */
+    --secondary: #2c3e50; /* Deep Midnight Blue (Text/Headers) */
+    --accent: #1abc9c; /* Bright Turquoise (Success/Active) */
+    --danger: #e74c3c; /* Vivid Red (Delete/Warning) */
+    --warning: #f39c12; /* Bright Orange (Edit/Pending) */
+    --info: #3498db; /* Bright Blue (Processing/Info) */
+    
+    --bg-light: #f5f7fa; /* Very light cool-gray background */
+    --bg-card: #ffffff; /* Card background */
+    --border-color: #ecf0f1; /* Super light border */
+    --font: 'Roboto', sans-serif;
+    
+    /* Spacing & Shadow */
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --radius-lg: 16px; 
+    /* Slightly less intense shadow for vibrancy */
+    --shadow-card: 
+        0 8px 15px rgba(0, 0, 0, 0.08); 
+    --shadow-input-focus: 0 0 0 5px rgba(255, 107, 107, 0.4); /* Primary focus ring (Coral) */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font);
+}
+
+body {
+    background-color: var(--bg-light);
+    padding: 30px; 
+    min-height: 100vh;
+}
+
+/* --- DASHBOARD LAYOUT --- */
+.dashboard-wrapper {
+    max-width: 1500px; 
+    margin: 0 auto;
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* --- CARD STYLING --- */
+.card {
+    background: var(--bg-card);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg); 
+    box-shadow: var(--shadow-card); 
+    border: 1px solid var(--border-color); 
+    transition: transform 0.3s ease-out, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Stronger lift on hover */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); 
+}
+
+
+/* --- LEFT SIDE: Menu Item Management (Form) --- */
+.admin-form-card {
+    flex: 1; 
+    position: sticky;
+    top: 30px; 
+    min-width: 380px; 
+}
+
+.header { text-align: center; margin-bottom: var(--spacing-lg); }
+.header h3 { 
+    color: var(--primary); /* Primary color for section header */
+    font-size: 2rem; 
+    margin-bottom: 8px; 
+    font-weight: 700; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.header h3 .fas {
+    color: var(--secondary); /* Icon remains dark for contrast */
+}
+.header p { color: #888; font-size: 0.95rem; }
+
+.form-group { margin-bottom: var(--spacing-md); }
+.form-group label { 
+    display: block; margin-bottom: 8px; font-weight: 600; 
+    color: var(--secondary); 
+    font-size: 1rem; 
+}
+
+/* INPUTS (Vibrant Focus) */
+.form-group input:not([type="checkbox"]), 
+.form-group select,
+.form-group textarea { 
+    width: 100%; padding: 15px; 
+    border: 2px solid var(--border-color); /* Thicker border */
+    border-radius: 12px; 
+    font-size: 1rem; 
+    background-color: #fcfcfc;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    resize: vertical; 
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); 
+}
+
+.form-group input:focus, 
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary); /* Vibrant focus border */
+    box-shadow: var(--shadow-input-focus); 
+    outline: none;
+}
+
+/* Image Preview */
+.preview-container {
+    width: 100%; height: 180px; 
+    background-color: var(--bg-light); 
+    border: 3px dashed var(--accent); /* Accent color dashed border */
+    border-radius: 12px;
+    margin-top: 15px;
+}
+.preview-container:hover {
+    border-color: var(--info);
+}
+.preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.preview-text { color: var(--accent); font-size: 1rem; font-weight: 500; }
+
+/* Buttons (Vibrant, Bold Color) */
+.btn-submit {
+    width: 100%; padding: 18px; 
+    background-color: var(--primary); 
+    color: white;
+    border: none; border-radius: 12px;
+    font-size: 1.25rem; font-weight: 700;
+    cursor: pointer; 
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 10px 20px rgba(255, 107, 107, 0.4);
+}
+.btn-submit:hover { 
+    background-color: #ff4757; /* Darker primary on hover */
+    transform: translateY(-4px); 
+    box-shadow: 0 15px 25px rgba(255, 107, 107, 0.6); 
+}
+.btn-submit:active { 
+    transform: translateY(0); 
+    box-shadow: 0 4px 8px rgba(255, 107, 107, 0.2); 
+}
+
+#logoutBtn {
+    width: auto !important; 
+    background-color: var(--danger) !important;
+    font-size: 1rem !important;
+    padding: 12px 20px !important;
+    box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4) !important;
+}
+
+#logoutBtn:hover { 
+    background-color: #c0392b !important; 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 18px rgba(231, 76, 60, 0.6) !important;
+}
+
+#statusMessage { 
+    margin-top: 25px; 
+    font-weight: 700; 
+    color: var(--secondary); 
+    padding: 12px; 
+    border-radius: 10px;
+    background-color: #e8f8f5; /* Light Accent Background */
+    border: 2px solid var(--accent); /* Accent Border */
+}
+
+/* --- DYNAMIC ITEM LIST --- */
+#itemList h3 {
+    color: var(--secondary); 
+    border-bottom: 3px solid var(--primary); /* Primary color separator */
+    padding-bottom: 15px;
+    margin-top: 40px; 
+    margin-bottom: 20px; 
+    font-size: 1.8rem;
+    color: var(--info); /* Use Info/Blue for the icon */
+}
+
+.item-row {
+    padding: 15px 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+.item-row:hover { 
+    background-color: #fcfcfc; 
+    border-left: 5px solid var(--accent); /* Highlight row with accent color */
+    padding-left: 5px;
+}
+
+.item-info img {
+    width: 60px; height: 60px; 
+    border-radius: 50%; 
+    border: 3px solid var(--primary); /* Primary color ring */
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+.item-details strong {
+    color: var(--secondary);
+}
+
+.item-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn {
+    background-color: var(--warning); 
+    color: var(--secondary);
+}
+.edit-btn:hover { 
+    background-color: #e67e22; 
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(243, 156, 18, 0.4);
+}
+
+.delete-btn {
+    background-color: var(--danger); 
+    color: white;
+}
+.delete-btn:hover { 
+    background-color: #c0392b; 
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(231, 76, 60, 0.4);
+}
+
+
+/* --- RIGHT SIDE: ORDER LIST --- */
+.list-header {
+    border-bottom: 3px solid var(--accent); /* Accent color separator */
+}
+.list-header h2 { 
+    color: var(--secondary); 
+    font-size: 2.2rem; 
+}
+.list-header h2 .fas {
+    color: var(--accent); /* Accent color for the icon */
+}
+
+/* Order Header Labels */
+.order-header-labels {
+    color: var(--secondary);
+    border-bottom: 2px solid #bdc3c7; /* Darker border for structure */
+    font-size: 0.9rem; 
+}
+
+/* Order Row Styling */
+.order-row {
+    padding: 20px 0; 
+    border-bottom: 1px solid #ecf0f1;
+}
+.order-row:hover { 
+    background-color: #fefefe; 
+    border-left: 4px solid var(--info); /* Highlight with Info color */
+    padding-left: 1px;
+}
+
+/* Status Badge (Vibrant Full Colors) */
+.status-badge {
+    padding: 10px 18px; /* Larger padding for emphasis */
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    transition: all 0.2s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Subtle text shadow for pop */
+}
+
+/* Status Colors (Highly Contrasted) */
+.status-new { 
+    background-color: #f39c12; /* Warning/Orange */
+    color: white; 
+    box-shadow: 0 4px 8px rgba(243, 156, 18, 0.4);
+}
+.status-processing { 
+    background-color: var(--info); /* Info/Blue */
+    color: white; 
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+}
+.status-delivered { 
+    background-color: var(--accent); /* Success/Turquoise */
+    color: white; 
+    box-shadow: 0 4px 8px rgba(26, 188, 156, 0.4);
+}
+.status-cancelled { 
+    background-color: var(--danger); /* Danger/Red */
+    color: white; 
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
+}
+
+/* Responsive Overrides (Keep colors consistent) */
+@media (max-width: 600px) {
+    .order-total, .status-badge {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <main class="dashboard-wrapper" role="main">
+        
+        <section class="card admin-form-card" aria-labelledby="admin-panel-title">
+            <header style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                <h2 id="admin-panel-title" style="color: var(--secondary); font-size: 2rem;">Admin Panel</h2>
+                <button type="button" id="logoutBtn" class="btn-submit" aria-label="Sign out from admin panel">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </header>
+            
+            <article class="header" aria-labelledby="add-item-heading">
+                <h3 id="add-item-heading"><i class="fas fa-utensils"></i> Add Menu Item</h3>
+                <p>Upload new food items to the database</p>
+            </article>
+            
+            <form id="addItemForm" aria-label="Add new menu item form">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="itemName">Food Name</label>
+                        <input type="text" id="itemName" name="itemName" placeholder="e.g. Hyderabadi Chicken Biryani" required aria-required="true">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="itemDescription">Description</label>
+                        <textarea id="itemDescription" name="itemDescription" placeholder="A brief description of the dish (e.g., succulent chicken layered with aromatic basmati rice and saffron)" rows="3" required aria-required="true"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemPrice">Price (₹)</label>
+                        <input type="number" id="itemPrice" name="itemPrice" placeholder="e.g. 350.00" step="0.01" min="0" required aria-required="true">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemCategory">Category</label>
+                        <select id="itemCategory" name="itemCategory" required aria-required="true">
+                            <option value="" disabled selected>Select a Category...</option>
+                            <option value="biryani">Biryani Specials</option>
+                            <option value="pizza">Pizza</option>
+                            <option value="chinese">Fried Rice / Chinese</option>
+                            <option value="tiffin">Tiffins (Idli/Dosa)</option>
+                            <option value="icecream">Ice Creams</option>
+                            <option value="cake">Cakes & Pastries</option>
+                            <option value="beverage">Beverages / Drinks</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemImage">Image URL</label>
+                        <input type="url" id="itemImage" name="itemImage" placeholder="Paste image link here (https://...)" required aria-required="true">
+                        
+                        <div class="preview-container" aria-live="polite">
+                            <span class="preview-text">Image Preview</span>
+                            <img id="imagePreview" class="preview-img" src="" alt="Food item image preview">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="item-submit-btn">
+                        <i class="fas fa-plus-circle"></i> Add to Menu
+                    </button>
+                </fieldset>
+            </form>
+
+            <output id="statusMessage" role="status" aria-live="polite"></output>
+            
+            <section id="itemList" aria-labelledby="existing-items-heading">
+                <h3 id="existing-items-heading"><i class="fas fa-edit"></i> Existing Menu Items</h3>
+                <p style="text-align: center; color: #888; padding: 20px;">Menu item list will load here...</p>
+                
+            </section>
+
+        </section>
+
+        <section class="card orders-list-card" aria-labelledby="orders-heading">
+            <header class="list-header">
+                <h2 id="orders-heading"><i class="fas fa-receipt"></i> Customer Orders</h2>
+                <p style="color:#777; font-size: 0.9rem;">Live Incoming Orders (Click status to update)</p>
+            </header>
+            
+            <div class="order-header-labels" role="rowgroup">
+                <div role="columnheader" class="order-id">#ID</div>
+                <div role="columnheader">Customer/Address</div>
+                <div role="columnheader">Order Items</div>
+                <div role="columnheader">Total</div>
+                <div role="columnheader">Status</div>
+            </div>
+            
+            <div id="allOrdersContainer" role="list">
+                <p style="text-align: center; color: #888; padding: 30px;">Loading real-time orders...</p>
+
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="js/firebase_config.js"></script>
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Heaven | Full Multi-Cuisine Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <meta name="description" content="Food Heaven – Multi-cuisine restaurant with biryani, pizzas, Chinese, desserts, beverages & online ordering.">
+</head>
+
+<body>
+    <a class="sr-only" href="#main-content">Skip to content</a>
+
+    <header class="navbar">
+        <div class="navbar-container">
+            <a class="logo" href="#home" aria-label="Food Heaven Home">
+                <span>Food</span>Heaven
+            </a>
+
+            <nav class="menu-items" aria-label="Primary Navigation">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#food">Categories</a></li>
+                    <li><a href="#food-menu">Menu</a></li>
+                    <li><a href="#about-us">Chefs</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-icons">
+                <button id="cart-toggle" class="cart-icon" aria-label="View Cart (0 items)">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span id="cart-count" aria-live="polite">0</span>
+                </button>
+                <button id="theme-toggle" class="theme-icon" aria-label="Toggle light and dark themes">
+                    <i class="fa fa-moon" id="theme-icon"></i> 
+                </button>
+                <button id="profile-toggle" class="user-icon" aria-label="User Profile">
+                    <i class="fa fa-user"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="showcase-area" aria-label="Gourmet Food Delivery">
+            <div class="showcase-container">
+                <h1 class="main-title" id="home">
+                    The Fastest Delivery, The Freshest Ingredients
+                </h1>
+                <p class="lead">
+                    Order your favorite meals online from the best local restaurants. Fast, hot, and straight to your door.
+                </p>
+                <div class="hero-actions">
+                    <a href="#food-menu" class="btn btn-primary">Order Now</a>
+                    <a href="#food" class="btn btn-secondary">See Categories</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="food" class="container">
+            <h2 class="section-header">Browse Categories</h2>
+            <div class="horizontal-scroll-container">
+                <div class="category-list-horizontal">
+                    <a href="#biryani" class="category-card" aria-label="View Biryani Menu">
+                        <figure>
+                            <img src="https://www.shutterstock.com/image-photo/traditional-chicken-biryani-served-brass-600nw-2622739739.jpg" alt="Aromatic Chicken Biryani" loading="lazy">
+                            <figcaption class="overlay"><h3>Biryani</h3></figcaption>
+                        </figure>
+                    </a>
+                    <a href="#pizza" class="category-card" aria-label="View Pizza Menu">
+                        <figure>
+                            <img src="https://joyfoodsunshine.com/wp-content/uploads/2022/11/BBQ-chicken-pizza-recipe-9.jpg" alt="Freshly baked pizza" loading="lazy">
+                            <figcaption class="overlay"><h3>Pizza</h3></figcaption>
+                        </figure>
+                    </a>
+                    <a href="#chinese" class="category-card" aria-label="View Chinese Menu">
+                        <figure>
+                            <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?fm=jpg&q=60&w=3000" alt="Chinese noodles" loading="lazy">
+                            <figcaption class="overlay"><h3>Chinese</h3></figcaption>
+                        </figure>
+                    </a>
+                    <a href="#tiffins" class="category-card" aria-label="View Tiffin Menu">
+                        <figure>
+                            <img src="data:image/jpeg;base64,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" alt="South Indian tiffins" loading="lazy">
+                            <figcaption class="overlay"><h3>Tiffins</h3></figcaption>
+                        </figure>
+                    </a>
+                    <a href="#desserts-menu" class="category-card" aria-label="View Desserts Menu">
+                        <figure>
+                            <img src="https://i.pinimg.com/736x/b4/4b/0d/b44b0d3113cb9c4b37285ff8eba1e497.jpg" alt="Chocolate dessert" loading="lazy">
+                            <figcaption class="overlay"><h3>Desserts</h3></figcaption>
+                        </figure>
+                    </a>
+                </div>
+            </div> 
+        </section>
+
+        <section id="food-menu" class="container" aria-label="Our Full Restaurant Menu">
+           <div class="menu-topbar">
+                <nav class="secondary-nav-horizontal" aria-label="Quick jump to menu categories">
+                    <ul>
+                        <li><a href="#biryani" class="secondary-nav-link" data-category="biryani">🍛 Biryani Specials</a></li>
+                        <li><a href="#pizza" class="secondary-nav-link" data-category="pizza">🍕 Pizzas</a></li>
+                        <li><a href="#chinese" class="secondary-nav-link" data-category="chinese">🥡 Chinese Dishes</a></li>
+                        <li><a href="#tiffins" class="secondary-nav-link" data-category="tiffins">🍚 Tiffins / Meals</a></li>
+                        <li><a href="#desserts-menu" class="secondary-nav-link" data-category="desserts">🍰 Desserts & Drinks</a></li>
+                        
+                        <li class="nav-search-icon">
+                            <button aria-label="Search menu" id="toggle-menu-search">🔍</button>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <div class="menu-filter-container">
+                    <input 
+                        type="text" 
+                        id="menu-filter" 
+                        placeholder="Search the entire menu..." 
+                        class="search-input" 
+                        aria-label="Search menu items"
+                    >
+                </div>
+            </div>
+
+            <article class="category-block container">
+                <h3 class="category-header" id="biryani">🍛 Biryani Specials</h3>
+                <div class="horizontal-scroll-container">
+                    <div class="food-menu-container" id="container-biryani">
+                        <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                        <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                        <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="category-block container">
+                <h3 class="category-header" id="pizza">🍕 Pizzas</h3>
+                <div class="food-menu-container" id="container-pizza">
+                    <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                    <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                </div>
+            </article>
+
+            <article class="category-block container">
+                <h3 class="category-header" id="tiffins">🍚 Tiffins</h3> 
+                <div class="food-menu-container" id="container-tiffin"> 
+                    <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                </div>
+            </article>
+
+            <article class="category-block container">
+                <h3 class="category-header" id="chinese">🥡 Chinese</h3>
+                <div class="food-menu-container" id="container-chinese">
+                    <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                </div>
+            </article>
+
+            <article class="category-block container">
+                <h3 class="category-header" id="desserts-menu">🍰 Desserts & Beverages</h3>
+                <div class="food-menu-container" id="container-desserts">
+                    <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                    <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                    <div class="menu-card skeleton"><div class="mc-img"></div><div class="mc-body"><div class="mc-title"></div><div class="mc-desc"></div></div><div class="mc-foot"></div></div>
+                </div>
+            </article>
+        </section>
+
+        <section id="about-us">
+            <div class="container">
+                <h2 class="section-header">Our Culinary Team</h2>
+                <div class="team-grid">
+                    <article class="team-member-card">
+                        <img src="https://hungryforever.net/wp-content/uploads/2015/07/DSC_6397.jpg" alt="Vineet Bhatia, Michelin-starred Head Chef" loading="lazy">
+                        <h3>Vineet Bhatia</h3>
+                        <p>Head Chef</p>
+                    </article>
+                    <article class="team-member-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTwZ2ScOyHrCfbYVQ2jCd-tiy5mQzVRPSNJqMUaRU3bQ&s" alt="Vikas Khanna, Operations Director" loading="lazy">
+                        <h3>Vikas Khanna</h3>
+                        <p>Operations</p>
+                    </article>
+                    <article class="team-member-card">
+                        <img src="https://hungryforever.net/wp-content/uploads/2015/07/28-291108_gwlivefood-390-2.jpg" alt="Anjum Anand, Pastry Chef" loading="lazy">
+                        <h3>Anjum Anand</h3>
+                        <p>Pastry Chef</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="reviews" aria-labelledby="reviews-header">
+            <div class="container">
+                <h2 id="reviews-header" class="section-header">What Customers Say</h2>
+                <div class="review-grid">
+                    <article class="review-card" aria-label="Review by Mahesh Babu">
+                        <p>"The biryani is restaurant quality at home! Best delivery service ever."</p>
+                        <h4>&mdash; Mahesh Babu</h4>
+                    </article>
+                    <article class="review-card" aria-label="Review by Jai Shah">
+                        <p>"Pizzas arrive piping hot with perfect crust. 5⭐ every time!"</p>
+                        <h4>&mdash; Jai Shah</h4>
+                    </article>
+                    <article class="review-card" aria-label="Review by David Watson">
+                        <p>"Authentic flavors and generous portions. Highly recommended!"</p>
+                        <h4>&mdash; David Watson</h4>
+                    </article>
+                </div>
+                <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+            </div>
+        </section>
+
+        <section id="contact" aria-label="Contact Us Form and Information">
+            <div class="contact-container container">
+                <form class="form-container" aria-labelledby="contact-form-title">
+                    <h2 id="contact-form-title">Get In Touch</h2>
+                    <input type="text" placeholder="Your Name" required aria-required="true" aria-label="Your full name">
+                    <input type="email" placeholder="Email Address" required aria-required="true" aria-label="Your email address">
+                    <textarea rows="5" placeholder="Tell us about your order or inquiry..." required aria-required="true" aria-label="Your message"></textarea>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+                
+                <img 
+                    src="https://images.unsplash.com/photo-1556910103-1c02745aae4d" 
+                    alt="Professional chef preparing gourmet food in modern kitchen" 
+                    loading="lazy"
+                >
+            </div>
+        </section>
+    </main>
+
+    <div id="cart-overlay" class="sidebar-overlay" onclick="window.toggleCart(false)" role="presentation" aria-hidden="true"></div>
+    <div id="cart-sidebar" class="sidebar" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+        <div class="sidebar-header">
+            <h3 id="cart-title">🛒 Your Cart</h3>
+            <button id="close-cart" class="sidebar-close-btn" aria-label="Close shopping cart">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div id="cart-items-container" class="sidebar-body">
+            <p class="empty-msg">Your cart is empty. Start shopping now!</p>
+        </div>
+        <div class="sidebar-footer">
+            <div class="cart-total-row" aria-live="polite">
+                <span class="cart-total-label">Total:</span>
+                <span id="total-price">₹0.00</span>
+            </div>
+            <button id="checkout-btn" class="btn btn-primary cart-checkout-btn" disabled>Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <div id="profile-overlay" class="sidebar-overlay" onclick="window.toggleProfile(false)" role="presentation" aria-hidden="true"></div>
+    <div id="profile-sidebar" class="sidebar" role="dialog" aria-modal="true" aria-labelledby="profile-title">
+        <div class="sidebar-header">
+            <h3 id="profile-title">👤 User Profile</h3>
+            <button id="close-profile" class="sidebar-close-btn" aria-label="Close profile menu">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-body user-info">
+            
+            <div class="profile-user-card" id="user-display-card">
+                <div class="profile-avatar" id="profile-avatar-initials">
+                    <i class="fa fa-user-circle"></i> 
+                </div>
+                <div class="profile-details">
+                    <h4 id="profile-display-name">Guest User</h4> 
+                    <p id="profile-display-email">Please Login to access features</p>
+                </div>
+            </div>
+            
+           <ul class="profile-menu-list" id="logged-in-menu" style="display:none;">
+    <li>
+        <a class="profile-tab-link active" 
+           data-view="order-history" 
+           aria-label="View Order History"
+           role="button" 
+           tabindex="0">
+            <i class="fas fa-history"></i> Order History
+        </a>
+    </li>
+    <li>
+        <a class="profile-tab-link" 
+           data-view="saved-items" 
+           aria-label="View Saved Items (Wishlist)"
+           role="button" 
+           tabindex="0">
+            <i class="fas fa-heart"></i> Saved Items (Wishlist)
+        </a>
+    </li>
+    <li>
+        <a class="profile-tab-link" 
+           data-view="address-book" 
+           aria-label="Manage Addresses"
+           role="button" 
+           tabindex="0">
+            <i class="fas fa-map-marker-alt"></i> Delivery Addresses
+        </a>
+    </li>
+    <li>
+        <a class="profile-tab-link" 
+           data-view="account-settings" 
+           aria-label="Account Settings"
+           role="button" 
+           tabindex="0">
+            <i class="fas fa-cog"></i> Account Settings
+        </a>
+    </li>
+</ul>
+
+            <div class="profile-content-panes">
+                
+                <div id="order-history" class="profile-view active">
+                    <h3><i class="fas fa-history"></i> Recent Orders</h3>
+                    <p class="empty-view-msg">No recent orders found. Order your first delicious meal!</p>
+                </div>
+                
+                <div id="saved-items" class="profile-view">
+                    <h3><i class="fas fa-heart"></i> Your Wishlist</h3>
+                    <p class="empty-view-msg">Your wishlist is empty. Browse the menu and save your favorites!</p>
+                </div>
+                
+                <div id="address-book" class="profile-view">
+                    <h3><i class="fas fa-map-marker-alt"></i> Manage Addresses</h3>
+                    <form class="profile-form">
+                        <div class="form-group">
+                            <label for="address-street">Street Address</label>
+                            <input type="text" id="address-street" required placeholder="e.g. 123 Main St">
+                        </div>
+                        <div class="form-group">
+                            <label for="address-city">City, State, Pin</label>
+                            <input type="text" id="address-city" required placeholder="e.g. Hyderabad, TS, 500001">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-small">Save New Address</button>
+                    </form>
+                    <div class="address-list">
+                        <h4>Saved Locations</h4>
+                        <p class="empty-view-msg">No addresses saved yet.</p>
+                    </div>
+                </div>
+
+                <div id="account-settings" class="profile-view">
+                    <h3><i class="fas fa-cog"></i> Account Settings</h3>
+                    <form class="profile-form">
+                        <div class="form-group">
+                            <label for="setting-name">Update Full Name</label>
+                            <input type="text" id="setting-name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="setting-phone">Phone Number</label>
+                            <input type="tel" id="setting-phone" placeholder="123-456-7890">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-small">Update Profile</button>
+                    </form>
+                    <button class="btn btn-danger btn-small" style="margin-top: 15px;">Change Password</button>
+                </div>
+
+            </div> 
+        </div>
+        
+        <div class="sidebar-footer">
+            <button id="auth-action-btn" class="btn btn-primary">Login / Signup</button>
+        </div>
+    </div>
+
+    <template id="menu-item-template">
+    <article class="menu-card" data-item-id="" role="article">
+        <div class="mc-img">
+            <img src="" alt="" loading="lazy">
+            <span class="mc-badge" aria-label="New arrival" role="status"></span>
+            
+            <button class="mc-wishlist-btn" aria-label="Save item to Wishlist" data-is-saved="false">
+                <i class="far fa-heart"></i>
+            </button>
+        </div>
+        <div class="mc-body">
+            <h4 class="mc-title"></h4>
+            <p class="mc-desc"></p>
+        </div>
+        
+        <div class="mc-foot">
+            <span class="mc-price" aria-label="Price">₹<span class="price-val">0.00</span></span>
+            
+            <div class="mc-control-area">
+                
+                <button class="card-add-btn" aria-label="Add to cart">
+                    <i class="fa fa-plus"></i> Add
+                </button>
+                
+                <div class="card-qty-pill" role="group" aria-label="Quantity controls for item">
+                    <button class="card-minus" aria-label="Decrease quantity">&minus;</button>
+                    <span class="card-qty-val" role="status" aria-live="polite">1</span>
+                    <button class="card-plus" aria-label="Increase quantity">+</button>
+                </div>
+                
+            </div>
+            </div>
+        </article>
+</template>
+    <script type="module" src="js/firebase_config.js"></script>
+    <script type="module" src="js/menu.js"></script>
+</body>
+</html>

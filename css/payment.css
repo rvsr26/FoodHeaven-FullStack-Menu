@@ -1,0 +1,526 @@
+/* =========================================
+    1. GLOBAL VARIABLES & RESET
+    ========================================= */
+:root {
+    --primary: #e63946;        /* Pizza Red */
+    --primary-hover: #d62828;
+    --secondary: #1d3557;      /* Deep Navy */
+    --white: #ffffff;
+    --light-bg: #f4f7f6;       /* Light Grey Background */
+    --border: #e0e0e0;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --shadow: 0 4px 15px rgba(0,0,0,0.05);
+    --success: #2a9d8f;
+    --logo-color: #000000; /* Assuming logo text is black if img is not used */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 62.5%; /* 1rem = 10px */
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+    font-size: 1.6rem;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: 0.3s;
+}
+
+/* =========================================
+    2. NAVBAR
+    ========================================= */
+.navbar {
+    background: var(--white);
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo span { /* Style for logo text if image is not used */
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--secondary);
+}
+
+.logo span:first-child {
+    color: var(--primary);
+}
+
+.logo img {
+    height: 50px; /* If logo is an image */
+}
+
+.back-link {
+    font-weight: 600;
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.4rem;
+}
+
+.back-link:hover {
+    color: var(--primary);
+    transform: translateX(-5px);
+}
+
+/* =========================================
+    3. LAYOUT GRID
+    ========================================= */
+.main-wrapper {
+    padding-bottom: 60px;
+}
+
+.container {
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr; /* Left column wider */
+    gap: 40px;
+    align-items: start;
+}
+
+/* =========================================
+    4. FORM SECTION (LEFT COLUMN)
+    ========================================= */
+.form-section {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+/* Service Toggle (Delivery/Dine-In) */
+.service-toggle {
+    display: flex;
+    background: #f0f2f5;
+    padding: 5px;
+    border-radius: 50px;
+    margin-bottom: 30px;
+}
+
+.service-toggle input {
+    display: none;
+}
+
+.toggle-btn {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 50px;
+    color: var(--text-light);
+    font-weight: 600;
+    font-size: 1.4rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.service-toggle input:checked + .toggle-btn {
+    background: var(--secondary);
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(29, 53, 87, 0.3);
+}
+
+.step-title {
+    font-size: 1.8rem;
+    color: var(--secondary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+    margin-top: 30px;
+}
+
+.step-title:first-of-type {
+    margin-top: 0;
+}
+
+/* Auth Status Message */
+.contact-common .info-text {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--success);
+    margin-bottom: 15px;
+    padding: 5px 0;
+}
+
+/* Input Fields */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.input-group input, 
+.input-group textarea,
+.input-group select { /* Added Select Styling */
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1.5rem;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.input-group input:focus, 
+.input-group textarea:focus,
+.input-group select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* =========================================
+    5. PAYMENT OPTIONS
+    ========================================= */
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.payment-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--white);
+}
+
+.payment-card i {
+    font-size: 2.4rem;
+    display: block;
+    margin-bottom: 8px;
+    color: #888;
+    transition: color 0.3s;
+}
+
+.payment-card span {
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: var(--text-light);
+}
+
+.payment-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.payment-card.selected {
+    border-color: var(--primary);
+    background-color: #fff5f5;
+    box-shadow: 0 4px 10px rgba(230, 57, 70, 0.15);
+}
+
+.payment-card.selected i {
+    color: var(--primary);
+}
+
+.payment-card.selected span {
+    color: var(--primary);
+}
+.hidden {
+    display: none !important;
+}
+#dinein-details, #delivery-details {
+    /* Merged animations into one block */
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.payment-inputs {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px dashed var(--border);
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-pay {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+}
+
+.btn-pay:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(230, 57, 70, 0.4);
+}
+
+/* =========================================
+    6. ORDER SUMMARY (RIGHT COLUMN)
+    ========================================= */
+.summary-section {
+    position: sticky;
+    top: 100px; /* Sticks when scrolling */
+}
+
+.order-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.order-card h3 {
+    font-size: 1.8rem;
+    color: var(--secondary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+/* Item Summary List Styling */
+#items-list-container {
+    max-height: 250px; 
+    overflow-y: auto; 
+    margin-bottom: 15px;
+    padding-right: 10px; /* Space for scrollbar */
+}
+.item-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+    padding: 5px 0;
+    border-bottom: 1px solid #f8f8f8;
+}
+.item-summary-row span:first-child {
+    color: var(--text-dark);
+}
+.item-summary-row span:last-child {
+    font-weight: 600;
+}
+
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 1.5rem;
+    color: var(--text-light);
+}
+
+.summary-row span:last-child {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+hr {
+    border: 0;
+    border-top: 1px dashed var(--border);
+    margin: 20px 0;
+}
+
+.summary-row.total {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-top: 10px;
+}
+
+.summary-row.total span:last-child {
+    color: var(--primary);
+}
+
+.secure-badge {
+    margin-top: 25px;
+    text-align: center;
+    background: #e0f2f1;
+    color: var(--success);
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* =========================================
+    7. MODALS & OVERLAYS
+    ========================================= */
+#processing-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(29, 53, 87, 0.9); /* Dark overlay */
+    z-index: 2000;
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    backdrop-filter: blur(5px);
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(255,255,255,0.2);
+    border-top: 5px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#success-modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 2001;
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+}
+
+.success-content {
+    background: var(--white);
+    padding: 50px 40px;
+    border-radius: 15px;
+    text-align: center;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popUp {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.success-content i {
+    font-size: 6rem;
+    color: var(--success);
+    margin-bottom: 20px;
+}
+
+.success-content h2 {
+    font-size: 2.5rem;
+    color: var(--secondary);
+    margin-bottom: 10px;
+}
+
+.success-content p {
+    font-size: 1.6rem;
+    color: var(--text-light);
+    margin-bottom: 30px;
+}
+
+.btn-home {
+    background: var(--secondary);
+    color: var(--white);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-home:hover {
+    background: var(--primary);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* =========================================
+    8. RESPONSIVE DESIGN
+    ========================================= */
+@media (max-width: 768px) {
+    .checkout-grid {
+        grid-template-columns: 1fr; /* Stack columns */
+        gap: 30px;
+    }
+
+    .summary-section {
+        position: static; /* Remove sticky on mobile */
+        order: -1; /* Show summary BEFORE the form on mobile */
+        margin-bottom: 30px;
+    }
+    
+    .payment-options {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    
+    .payment-card {
+        padding: 15px 5px;
+    }
+    
+    .row {
+        grid-template-columns: 1fr; /* Stack inputs in rows */
+        gap: 15px;
+    }
+}
