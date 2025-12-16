@@ -5,16 +5,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-// !!! IMPORTANT: REPLACE WITH YOUR ACTUAL FIREBASE CONFIG !!!
-export const firebaseConfig = {
-    apiKey: "AIzaSyApuqg142ds-EtzCQj62BSQVaH8gYmyfMs",
-    authDomain: "zomat-8e948.firebaseapp.com",
-    projectId: "zomat-8e948",
-    storageBucket: "zomat-8e948.firebasestorage.app",
-    messagingSenderId: "426255965986",
-    appId: "1:426255965986:web:b47c68f03f8681e4790f7b"
-};
+// !!! IMPORTANT: Importing configuration from a separate, ignored file !!!
+// This ensures the secret key is not checked into Git.
+import { privateFirebaseConfig } from './secure_config.js';
 
-const app = initializeApp(firebaseConfig);
+
+const app = initializeApp(privateFirebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// NOTE: The 'firebaseConfig' variable is no longer exported or hardcoded here.
+// Only the initialized 'auth' and 'db' objects are exported.
