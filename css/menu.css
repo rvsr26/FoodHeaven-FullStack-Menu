@@ -104,7 +104,7 @@ button { background: none; border: none; cursor: pointer; font-family: inherit; 
 }
 /* Section Header Accent Dot */
 .section-header::after {
-    content: "";
+    content: none;
     width: 6px;
     height: 6px;
     background: var(--primary);
@@ -294,386 +294,408 @@ body.dark-mode #cart-count {
 .btn-secondary { border: 2px solid #fff; color: #fff; }
 .btn-secondary:hover { background: #fff; color: var(--dark); transform: translateY(-4px); }
 
+/* ================= REFINED CATEGORY SCROLL SECTION ================= */
 
-/* ================= CATEGORY SCROLL SECTION (#food) ================= */
 .horizontal-scroll-container { 
-    overflow-x: auto; scrollbar-width: none; padding-block: 1rem 2rem; 
-    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; 
+    overflow-x: auto; 
+    scrollbar-width: none; 
+    /* padding-inline adds "breathing room" at the start and end of the scroll */
+    padding: 1rem 1.5rem 2.5rem; 
+    scroll-snap-type: x mandatory; 
+    -webkit-overflow-scrolling: touch; 
+    /* Prevents the scroll from affecting the parent page bounce */
+    overscroll-behavior-x: contain; 
 }
-.horizontal-scroll-container::-webkit-scrollbar { display: none; }
-.category-list-horizontal { display: flex; gap: 1.5rem; }
-.category-card { 
-    flex: 0 0 320px; height: 240px; border-radius: var(--radius-lg); 
-    overflow: hidden; position: relative; scroll-snap-align: start; 
-    box-shadow: var(--shadow-md); transition: 0.3s var(--ease);
-}
-.category-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-strong); }
-.category-card img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s var(--ease); }
-.category-card:hover img { transform: scale(1.06); }
-.category-card .overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 1.5rem; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); }
-.category-card h3 { color: #fff; font-size: 1.6rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
 
-/* ================= MENU TOPBAR (SECONDARY NAVBAR - FIXED) ================= */
+.horizontal-scroll-container::-webkit-scrollbar { display: none; }
+
+.category-list-horizontal { 
+    display: flex; 
+    gap: 1.25rem; 
+    /* Ensures the last card doesn't get cut off immediately */
+    width: max-content; 
+}
+
+.category-card { 
+    /* Use clamp to make cards smaller on mobile and 320px on desktop */
+    flex: 0 0 clamp(240px, 60vw, 320px); 
+    height: 220px; 
+    border-radius: 24px; 
+    overflow: hidden; 
+    position: relative; 
+    scroll-snap-align: center; /* Better UX for mobile flic-scrolling */
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06); 
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.category-card:hover { 
+    transform: translateY(-10px); 
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12); 
+}
+
+.category-card img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    object-position: center; 
+    transition: transform 0.8s var(--ease); 
+}
+
+.category-card:hover img { 
+    transform: scale(1.1) rotate(1deg); 
+    filter: brightness(0.9);
+}
+
+/* Advanced Scrim Overlay */
+.category-card .overlay { 
+    position: absolute; 
+    inset: 0; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: flex-end; 
+    padding: 1.5rem; 
+    /* Modern "scrim" gradient: smoother than a standard linear gradient */
+    background: linear-gradient(
+        to top, 
+        rgba(0,0,0,0.8) 0%, 
+        rgba(0,0,0,0.3) 40%, 
+        transparent 100%
+    ); 
+    transition: background 0.3s ease;
+}
+
+.category-card:hover .overlay {
+    background: linear-gradient(
+        to top, 
+        rgba(233, 44, 64, 0.7) 0%, /* Fades into your brand Red on hover */
+        rgba(0,0,0,0.4) 50%, 
+        transparent 100%
+    );
+}
+
+.category-card h3 { 
+    color: #fff; 
+    font-size: 1.5rem; 
+    font-weight: 900; 
+    letter-spacing: -0.5px;
+    margin: 0;
+    transition: transform 0.3s var(--ease);
+}
+
+.category-card:hover h3 {
+    transform: translateX(5px);
+}
+
+/* Optional: Small "Explore" text that appears on hover */
+.category-card::after {
+    content: 'View All →';
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.category-card:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+/* ================= MENU TOPBAR REFINED ================= */
 .menu-topbar {
-    --topbar-bg: linear-gradient(180deg, var(--bg-secondary), var(--bg-card));
-    
-    /* Layout: Flex container for the Navigation List and the Search Box */
+    --topbar-bg: rgba(255, 255, 255, 0.85); /* Light Mode Glass */
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    gap: 2rem; /* Gap between the nav list and the search input */
+    gap: 1.5rem;
 
-    /* Sticky setup (Remains the same) */
     position: sticky; 
-    top: var(--sticky-topbar-offset); 
+    top: 70px; /* Adjust based on your main Navbar height */
     z-index: 30;
     
-    /* Appearance and Padding */
-    padding: 0.75rem clamp(1.5rem, 4vw, 2.4rem); /* Reduced vertical padding for nav look */
-    margin-bottom: 3.2rem;
-    background: var(--topbar-bg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.55);
-    backdrop-filter: blur(14px) saturate(1.1);
-    isolation: isolate;
+    padding: 0.8rem 1.5rem;
+    margin: 1rem auto 2.5rem auto;
+    max-width: 1200px; /* Keeps it aligned with container */
     
-    /* CRITICAL FOR HORIZONTAL NAV: Allow the bar itself to scroll if the tabs overflow */
-    overflow-x: auto; 
-    scrollbar-width: none; /* Hide scrollbar */
+    background: var(--topbar-bg);
+    border-radius: 50px; /* Capsule look */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Dark Mode Adjustment */
+body.dark-mode .menu-topbar {
+    --topbar-bg: rgba(28, 28, 30, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* --- Navigation List --- */
+.secondary-nav-horizontal {
+    flex: 1;
+    overflow-x: auto;
+    scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
 }
-.menu-topbar::-webkit-scrollbar { display: none; }
 
-
-/* Topbar Separator (Removed as it conflicts with the scrolling list) */
-.menu-topbar::after {
-    content: none;
-}
-
-/* --- NEW: Horizontal List Styles (Secondary Nav Container) --- */
-.secondary-nav-horizontal {
-    flex-shrink: 0; /* Prevents the tabs from being compressed by the search bar */
-    flex-grow: 1; 
-    min-width: fit-content;
-}
+.secondary-nav-horizontal::-webkit-scrollbar { display: none; }
 
 .secondary-nav-horizontal ul {
-    list-style: none;
     display: flex;
+    list-style: none;
+    gap: 1.5rem;
     align-items: center;
-    gap: clamp(1.2rem, 3vw, 2rem); /* Space between category links */
-    padding: 0;
-    margin: 0;
-    width: max-content; /* Force list to be as wide as its content for scrolling */
+    width: max-content;
+    padding: 0 0.5rem;
 }
 
 .secondary-nav-link {
-    display: block;
-    padding: 0.5rem 0.2rem;
+    text-decoration: none;
+    color: var(--text-low);
     font-weight: 600;
     font-size: 0.95rem;
-    color: var(--text-low);
+    white-space: nowrap;
+    padding: 0.6rem 0.2rem;
+    transition: all 0.3s ease;
     position: relative;
-    transition: color 0.2s;
-    white-space: nowrap; /* Prevent wrapping of category titles */
 }
 
-.secondary-nav-link:hover,
+.secondary-nav-link:hover {
+    color: var(--primary);
+}
+
 .secondary-nav-link.active {
     color: var(--primary);
 }
 
+/* Active Underline Indicator */
 .secondary-nav-link.active::after {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: 0;
     left: 0;
     width: 100%;
     height: 3px;
-    background: linear-gradient(to right, var(--primary), var(--primary-dark));
-    border-radius: 99px;
+    background: var(--primary);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(233, 44, 64, 0.3);
 }
 
-/* --- Search Container & Input (Remains the same, but positioning is controlled by .menu-topbar flex) --- */
+/* --- Search Box Styles --- */
 .menu-filter-container { 
-    /* The search container itself */
-    flex: 0 0 320px; /* Give the search input a fixed max-width/flex-basis */
     position: relative; 
-    flex-shrink: 0; /* Prevents it from shrinking too much when space is tight */
-    padding-left: 2rem; /* Add spacing if the nav list doesn't take up the full space */
+    flex: 0 0 280px; /* Fixed width on desktop */
 }
+
+.search-icon {
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-low);
+    pointer-events: none;
+}
+
 .search-input { 
     width: 100%; 
-    padding: 0.9rem 1.7rem; 
-    border-radius: 999px; 
+    padding: 0.75rem 1rem 0.75rem 2.8rem; /* Space for icon */
+    border-radius: 30px; 
     background: var(--bg-card); 
     border: 1px solid var(--border-soft); 
-    font-size: 1rem; 
-    font-weight: 500; 
+    font-size: 0.9rem; 
     color: var(--text-high); 
-    transition: 0.25s var(--ease); 
+    transition: all 0.3s var(--ease); 
 }
+
 .search-input:focus { 
     outline: none; 
-    border-color: transparent; 
-    box-shadow: 0 0 0 5px rgba(233,44,64,0.18), var(--shadow-soft); 
-    transform: translateY(-1px); 
-}
-body.dark-mode .search-input:focus { box-shadow: 0 0 0 5px rgba(255, 77, 94, 0.25), var(--shadow-soft); }
-
-/* Hide the search icon button in the nav list on desktop (if present in HTML) */
-.nav-search-icon {
-    display: none; 
+    border-color: var(--primary);
+    background: var(--bg-body);
+    box-shadow: 0 0 0 4px rgba(233,44,64,0.1);
 }
 
-/* --- MOBILE ADJUSTMENTS (Overwrite if needed, keeping structure clean) --- */
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) {
+    .menu-filter-container { flex: 0 0 200px; }
+}
+
 @media (max-width: 768px) {
     .menu-topbar {
-        /* On small screen, the scrollable list and the search bar are stacked */
-        flex-direction: column; 
-        align-items: flex-start;
+        flex-direction: column;
+        border-radius: 20px; /* Less rounded for mobile stacking */
+        padding: 1rem;
         gap: 1rem;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-        overflow-x: auto; /* Keep horizontal scroll for tabs */
+        top: 60px; /* Closer to top on mobile */
     }
     
     .secondary-nav-horizontal {
-        width: 100%; 
+        width: 100%;
+        border-bottom: 1px solid var(--border-soft);
+        padding-bottom: 0.5rem;
     }
 
     .menu-filter-container {
-        flex: 1 1 100%; /* Make search bar full width */
-        padding-left: 0; 
         width: 100%;
+        flex: none;
     }
+}/* ================= MENU LIST & CARDS ================= */
+
+/* 1. Category Layout */
+.category-block { 
+    padding-block: 1.5rem; 
+    max-width: 1200px; 
+    margin: 0 auto; 
 }
-
-/* ================= MENU LIST & CARDS ================= */
-
-.category-block { padding-block: 0; max-width: 100%; }
-
-/* Sticky Category Header */
+/* ================= TEXT-ONLY BLUR RED HEADER (NO DOT) ================= */
 .category-header { 
-    font-size: 1.75rem; 
-    font-weight: 800; 
-    margin: 3rem 0 1.4rem; 
-    padding: 0.6rem 1.5rem 0.6rem 0; 
-    position: static;
-    z-index: 1;
-    background: linear-gradient(to right, var(--bg-main) 75%, transparent);
-    backdrop-filter: blur(6px);
-}
-.food-menu-container { 
-    display: flex; gap: 1.2rem; 
-    padding: 0.75rem 1.5rem 1.6rem 0; /* Left padding 0, right for scroll */
-    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; 
-    scroll-behavior: smooth; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
-    position: relative;
-}
-.food-menu-container::-webkit-scrollbar { display: none; }
-/* Scroll fade hint */
-.food-menu-container::after {
-    content: ""; position: absolute; top: 0; right: 0; width: 60px; height: 100%; pointer-events: none;
-    background: linear-gradient(to left, var(--bg-main), transparent);
-}
-
-/* Menu Card Base (using the original structure + fixed width) */
-.menu-card { 
-    flex: 0 0 280px; position: relative; background: var(--bg-card); border-radius: var(--radius-lg); 
-    overflow: hidden; box-shadow: var(--shadow-soft); transition: 0.3s var(--ease);
-    display: flex; flex-direction: column; scroll-snap-align: start;
-}
-.menu-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
-.menu-card img { width: 100%; height: 180px; object-fit: cover; transition: 0.3s var(--ease); }
-.menu-card:hover img { transform: scale(1.05); }
-.mc-body { padding: 1rem; flex-grow: 1; }
-.mc-title { font-weight: 800; font-size: 1.15rem; margin-bottom: 0.3rem; }
-.mc-desc { font-size: 0.9rem; color: var(--text-low); line-height: 1.5; }
-.mc-foot { 
-    /* CORE ALIGNMENT: Ensures price and controls are on one line, centered vertically */
-    display: flex; 
-    justify-content: space-between; /* Pushes price to the left and controls to the right */
-    align-items: center; 
-
-    /* LAYOUT & AESTHETICS */
-    padding: 0.8rem 1rem; 
-    border-top: 1px solid var(--border-soft); 
-    background: var(--bg-secondary);
+    position: sticky;
+    top: 120px; 
+    z-index: 20;
     
-    /* SPACE MANAGEMENT: Keeps a visual distance between price and the controls */
-    gap: 1rem; 
-
-    /* CRITICAL FOR BUTTON SWAP: Provides the positioning context for the 
-       absolutely positioned add button and quantity pill. */
-    position: relative; 
+    display: flex;
+    width: fit-content; 
+    margin: 1rem 0 1rem 1.5rem; 
+    
+    /* Background blur contained to the text area */
+    background: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 50px; 
+    
+    color: var(--primary); 
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
+    font-weight: 900;
+    padding: 0.6rem 1.4rem; 
+    
+    box-shadow: none;
+    border: none;
 }
-.mc-price { font-size: 1.4rem; font-weight: 900; color: var(--primary); }
-.card-add-btn { background: var(--primary); color: #fff; padding: 0.6rem 1.5rem; border-radius: 99px; font-weight: 700; transition: opacity 0.2s, transform 0.2s; }
-.card-add-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
-/* ========================================================= */
-/* 💖 1. MENU CARD WISHLIST BUTTON (.mc-wishlist-btn)         */
-/* ========================================================= */
+
+/* REMOVED: The .category-header::before block that created the dot */
+
+body.dark-mode .category-header {
+    background: rgba(0, 0, 0, 0.2);
+    color: #ff4d5e; 
+}
+
+.food-menu-container { 
+    display: flex; 
+    gap: 1.5rem; 
+    padding: 1rem 1.5rem 2.5rem 0.5rem; 
+    overflow-x: auto; 
+    scrollbar-width: none; 
+    -webkit-overflow-scrolling: touch; 
+    scroll-behavior: smooth; 
+    scroll-snap-type: x mandatory; /* Makes cards 'snap' into place when scrolling */
+}
+
+.food-menu-container::-webkit-scrollbar { display: none; }
+
+/* 2. Advanced Menu Card */
+.menu-card { 
+    flex: 0 0 280px; 
+    scroll-snap-align: start;
+    background: var(--bg-card); 
+    border-radius: var(--radius-lg); 
+    overflow: hidden; 
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex; 
+    flex-direction: column; 
+}
+
+.menu-card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12); 
+}
+
+.mc-img { position: relative; height: 180px; overflow: hidden; }
+.mc-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.menu-card:hover .mc-img img { transform: scale(1.08); }
+
+/* 3. Wishlist Button Overlay */
 .mc-wishlist-btn {
-    position: absolute;
-    top: 1rem; /* Spacing from top */
-    right: 1rem; /* Spacing from right */
-    z-index: 10;
-
-    /* Base Appearance */
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--bg-card); /* White/Card background */
-    border: 1px solid var(--border-soft);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-    display: grid;
-    place-items: center;
-    transition: all 0.25s var(--ease);
+    position: absolute; top: 0.8rem; right: 0.8rem;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px); border: none;
+    cursor: pointer; display: grid; place-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
 }
 
-.mc-wishlist-btn i {
-    font-size: 1rem;
-    color: var(--text-low); /* Subdued gray color when not saved (FAR icon) */
-    transition: color 0.25s;
+.mc-wishlist-btn[data-is-saved="true"] { background: var(--primary); color: #fff; }
+.mc-wishlist-btn[data-is-saved="true"] i { font-weight: 900; }
+
+/* 4. Card Content */
+.mc-body { padding: 1.2rem; flex-grow: 1; }
+.mc-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--text-high); }
+.mc-desc { font-size: 0.9rem; color: var(--text-low); line-height: 1.5; }
+
+/* 5. Footer & Control Area (The Morphing Logic) */
+.mc-foot { 
+    display: flex; justify-content: space-between; align-items: center; 
+    padding: 1rem 1.2rem; border-top: 1px solid var(--border-soft); 
+    background: var(--bg-card); min-height: 70px;
 }
 
-/* Hover/Focus State */
-.mc-wishlist-btn:hover,
-.mc-wishlist-btn:focus-visible {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.mc-price { font-size: 1.3rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+
+.mc-control-area { position: relative; width: 110px; height: 40px; }
+
+/* Add Button State */
+.card-add-btn { 
+    position: absolute; inset: 0;
+    background: var(--primary); color: #fff; 
+    border-radius: 99px; font-weight: 700; border: none;
+    cursor: pointer; transition: 0.3s var(--ease);
 }
 
-/* SAVED STATE: When item is in the wishlist (data-is-saved="true") */
-.mc-wishlist-btn[data-is-saved="true"] {
-    background: var(--primary); /* Vibrant background color */
-    border-color: var(--primary);
-    transform: scale(1.05);
-}
-
-.mc-wishlist-btn[data-is-saved="true"] i {
-    /* Use FAS (solid heart) and white text */
-    color: #fff;
-}
-
-/* Dark Mode Adjustments */
-body.dark-mode .mc-wishlist-btn {
-    background: rgba(31, 42, 62, 0.85);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}/* ========================================================= */
-/* 📋 2. PROFILE: SAVED ITEMS LIST (.saved-items-list)        */
-/* ========================================================= */
-
-.saved-items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    padding-top: 1rem; 
-}
-
-.saved-item {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.8rem;
-    border-radius: var(--radius-md);
-    background: var(--bg-card);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-soft);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.saved-item:hover {
-    transform: translateY(-2px); /* Lift item slightly on hover */
-    box-shadow: var(--shadow-soft);
-}
-
-.saved-item img {
-    width: 50px; /* Thumbnail size */
-    height: 50px;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-    flex-shrink: 0;
-}
-
-.saved-item .item-info {
-    flex-grow: 1; /* Pushes buttons to the right */
-    min-width: 0;
-}
-
-.saved-item .item-info h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-.saved-item .item-info p {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--primary); /* Price highlight */
-}
-
-/* Buttons in Saved Item Card */
-.add-to-cart-from-wishlist {
-    padding: 0.5rem 1rem; 
-    font-size: 0.85rem;
-    border-radius: var(--radius-sm);
-    text-transform: none;
-    flex-shrink: 0;
-}
-
-.remove-from-wishlist {
-    /* Uses primary color (red) as the danger/removal color */
-    background: var(--primary-dark); 
-    color: #fff;
-    width: 30px; 
-    height: 30px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    transition: background 0.2s ease;
-}
-.remove-from-wishlist:hover {
-    background: var(--primary);
-}
-/* QUANTITY PILL (APP-GRADE UX) */
+/* Quantity Pill State */
 .card-qty-pill { 
-    display: flex; align-items: center; gap: 0.45rem; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
-    color: #fff; padding: 0.25rem 0.45rem; border-radius: 999px; font-size: 0.95rem; font-weight: 900; letter-spacing: 0.3px; 
-    opacity: 0; pointer-events: none; transform: scale(0.82) translateY(8px); transform-origin: center; 
-    transition: opacity 0.25s ease, transform 0.3s cubic-bezier(.25,1.4,.5,1);
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--primary); color: #fff; padding: 4px;
+    border-radius: 99px; opacity: 0; pointer-events: none; 
+    transform: scale(0.8); transition: 0.3s cubic-bezier(.25,1.4,.5,1);
 }
+
 .card-qty-pill button { 
-    width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.22); color: #fff; 
-    font-size: 1.1rem; font-weight: 900; display: grid; place-items: center; transition: 0.15s ease;
+    width: 32px; height: 32px; border-radius: 50%; 
+    background: rgba(255,255,255,0.2); color: #fff; 
+    border: none; cursor: pointer; font-size: 1.2rem;
 }
-.card-qty-pill button:active { transform: scale(0.88); }
 
-/* Toggle State */
-.menu-card.has-qty .card-add-btn { opacity: 0; visibility: hidden; pointer-events: none; }
-.menu-card.has-qty .card-qty-pill { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); }
+/* Toggle Logic: Applied via JS */
+.menu-card.has-qty .card-add-btn { opacity: 0; transform: scale(0.5); pointer-events: none; }
+.menu-card.has-qty .card-qty-pill { opacity: 1; pointer-events: auto; transform: scale(1); }
 
-
-/* ================= SKELETON LOADING ================= */
-.menu-card.skeleton { background: var(--bg-card); animation: none; }
-.menu-card.skeleton::after {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(110deg, transparent 25%, var(--skeleton-shimmer-color) 37%, transparent 63%);
-    animation: skeleton-shimmer 1.35s infinite; opacity: 0.9;
+/* 6. Skeleton Shimmer Effect */
+.menu-card.skeleton {
+    min-height: 350px;
+    background: linear-gradient(90deg, var(--bg-card) 25%, var(--skeleton-shimmer-color) 50%, var(--bg-card) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite linear;
 }
-@keyframes skeleton-shimmer { 0% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
-.menu-card.skeleton .mc-img, .menu-card.skeleton .mc-title, .menu-card.skeleton .mc-desc, .menu-card.skeleton .mc-price, .menu-card.skeleton .card-add-btn { 
-    background: var(--bg-skeleton); color: transparent; border-radius: 6px; visibility: visible; 
+
+@keyframes skeleton-shimmer { 
+    0% { background-position: -200% 0; } 
+    100% { background-position: 200% 0; } 
 }
-.menu-card.skeleton .mc-img { height: 140px; }
-.menu-card.skeleton .mc-title { height: 18px; margin-bottom: .4rem; }
-.menu-card.skeleton .mc-desc { height: 42px; }
-.menu-card.skeleton .mc-foot { min-height: 44px; }
 
-
+/* 7. Responsive Mobile Tweaks */
+@media (max-width: 600px) {
+    .menu-card { flex: 0 0 240px; }
+    .category-header { top: 115px; font-size: 1.3rem; }
+}
 /* ================= TEAM, REVIEWS, CONTACT, FOOTER SECTIONS ================= */
 #about-us { background: var(--bg-secondary); position: relative; overflow: hidden; padding-block: 4rem; }
 .team-grid { display: flex; gap: 2rem; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x mandatory; padding-bottom: 1rem; }
@@ -713,454 +735,176 @@ body.dark-mode .mc-wishlist-btn {
 .footer-tagline { opacity: 0.6; font-size: 0.8rem; margin-top: 0.5rem; }
 
 
-/* ================= SLIDING SIDEBARS (BASE) ================= */
+/* ================= SLIDING SIDEBARS (ADVANCED BASE) ================= */
+:root {
+    --sidebar-width: 400px;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
 
 .sidebar-overlay {
-    position: fixed; inset: 0; background: var(--overlay-bg); z-index: 1100; 
-    opacity: 0; visibility: hidden; transition: opacity 0.3s var(--ease), visibility 0.3s;
+    position: fixed; inset: 0; 
+    background: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(4px); /* Modern blur effect */
+    z-index: 1100; 
+    opacity: 0; visibility: hidden; 
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .sidebar {
-    position: fixed; top: 0; right: 0; width: var(--sidebar-width); height: 100%; 
-    background: var(--bg-card); z-index: 1101; transform: translateX(100%); 
-    box-shadow: var(--shadow-strong); transition: transform 0.3s var(--ease); 
+    position: fixed; top: 0; right: 0; 
+    width: var(--sidebar-width); height: 100%; 
+    background: var(--bg-card); z-index: 1101; 
+    transform: translateX(110%); /* Slightly further for cleaner entrance */
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
     display: flex; flex-direction: column;
+    overscroll-behavior: contain; /* Prevents body scroll */
 }
+
 .sidebar.active { transform: translateX(0); }
 .sidebar-overlay.active { opacity: 1; visibility: visible; }
-.sidebar-header {
-    /* Base header styles */
-    padding: 1.5rem 1.2rem; display: flex; justify-content: space-between; align-items: center; 
-    border-bottom: 1px solid var(--border-soft);
-}
-.sidebar-header h3 { font-size: 1.6rem; font-weight: 900; }
-.sidebar-close-btn { 
-    width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); 
-    color: var(--text-main); display: grid; place-items: center;
-}
-.sidebar-close-btn:hover { background: var(--primary); color: #fff; }
 
-/* ========================================================================== */
-/* 👤 PROFILE SIDEBAR – ADVANCED PRODUCT GRADE (V3 - FINAL FIX)               */
-/* ========================================================================== */
+/* ================= PROFILE SIDEBAR: PREMIUM REFINEMENT ================= */
 
-#profile-sidebar {
-    background: var(--bg-card);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden; 
-}
-
-/* ================= HEADER (Fixed at Top) ================= */
 #profile-sidebar .sidebar-header {
-    position: sticky;
-    top: 0;
-    z-index: 5; 
-    
-    padding: 1.2rem 1.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    
-    background: linear-gradient(
-        180deg,
-        var(--bg-card),
-        var(--bg-secondary)
-    );
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-soft);
+    padding: 1.25rem 1.5rem;
+    position: sticky; top: 0; z-index: 10;
 }
 
-#profile-sidebar .sidebar-header h3 {
-    font-size: 1.45rem;
-    font-weight: 900;
-    letter-spacing: .3px;
-}
-
-#close-profile {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-
-    background: var(--bg-secondary);
-    color: var(--text-low);
-
-    transition: background .2s ease, color .2s ease, transform .15s ease;
-}
-
-#close-profile:hover {
-    background: var(--primary);
-    color: #fff;
-    transform: scale(1.05);
-}
-
-/* ================= USER CARD ================= */
+/* User Card with modern gradient and mesh texture */
 .profile-user-card {
-    margin: 1.2rem;
-    padding: 1.25rem;
-
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    margin: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    position: relative;
+    overflow: hidden;
     color: #fff;
+    box-shadow: 0 10px 20px rgba(233, 44, 64, 0.2);
+}
 
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    box-shadow: var(--shadow-md);
+/* Subtle mesh texture overlay */
+.profile-user-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+    opacity: 0.1;
 }
 
 .profile-avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.25);
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
+    width: 64px; height: 64px;
+    border: 3px solid rgba(255,255,255,0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.profile-avatar i {
-    font-size: 1.9rem;
-}
-
-.profile-details h4 {
-    font-size: 1.2rem;
-    font-weight: 800;
-    margin-bottom: .15rem;
-}
-
-.profile-details p {
-    font-size: .85rem;
-    opacity: .9;
-}
-
-/* ================= MENU TABS (Sticky/Fixed Nav) ================= */
+/* Advanced Tab Navigation */
 .profile-menu-list {
-    list-style: none;
-    padding: .4rem 0;
-    margin: 0;
-    border-bottom: 1px solid var(--border-soft);
-    
-    /* Make the nav fixed relative to the top of the content body */
-    position: sticky;
-    top: calc(1.2rem + 1.25rem + 56px + 1.2rem); /* Approx. after the profile card */
     background: var(--bg-card);
-    z-index: 4;
-}
-
-.profile-menu-list li a {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: .9rem 1.4rem;
-    font-size: .95rem;
-    font-weight: 600;
-    color: var(--text-main);
-    transition: background .2s ease, color .2s ease;
-}
-
-.profile-menu-list li a i {
-    width: 22px;
-    text-align: center;
-    font-size: 1.1rem;
-    color: var(--text-low);
-}
-
-/* Hover */
-.profile-menu-list li a:hover {
-    background: var(--bg-secondary);
-    color: var(--primary);
-}
-
-/* Active */
-.profile-menu-list li a.active {
-    background: var(--bg-secondary);
-    color: var(--primary);
-    font-weight: 700;
-}
-
-.profile-menu-list li a.active::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 4px;
-    background: var(--primary);
-    border-radius: 0 4px 4px 0;
-}
-
-.profile-menu-list li a.active i {
-    color: var(--primary);
-}
-
-/* ================= BODY & SCROLL FIX ================= */
-#profile-sidebar .sidebar-body {
-    /* BASE: Container for fixed elements (card, nav) and scrollable content */
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto; /* SCROLL HERE to make card/nav sticky relative to the sidebar body */
-    padding: 0; /* Remove base body padding */
-}
-
-.profile-content-panes {
-    /* CONTENT: The scrollable area containing the views */
-    flex: 1;
-    padding: 0 1.4rem 1.6rem; /* Padding for the view content */
-    /* Removed overflow-y: auto from here, now handled by .sidebar-body */
-}
-
-/* Views */
-.profile-view {
-    display: none;
-    min-height: 100%;
-    animation: fadeSlide .25s ease;
-}
-
-.profile-view.active {
-    display: block;
-}
-
-/* Section Titles */
-.profile-view h3 {
-    font-size: 1.35rem;
-    font-weight: 900;
-    margin-bottom: 1.2rem;
-    padding-top: 1.2rem; /* Add top padding to views */
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-}
-
-/* Empty State */
-.empty-view-msg {
-    background: var(--bg-secondary);
-    padding: 1.3rem;
-    border-radius: var(--radius-md);
-    font-size: .95rem;
-    color: var(--text-low);
-    text-align: center;
-}
-
-/* ================= FORMS ================= */
-.profile-form .form-group {
+    padding: 0.5rem 1rem;
     margin-bottom: 1rem;
 }
 
-.profile-form label {
-    font-size: .85rem;
-    font-weight: 700;
-    color: var(--text-low);
-    margin-bottom: .35rem;
-    display: block;
+.profile-menu-list li a {
+    border-radius: 12px;
+    margin-bottom: 4px;
+    padding: 1rem 1.2rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.profile-form input {
-    width: 100%;
-    padding: .8rem 1rem;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-soft);
-    background: var(--bg-secondary);
-    color: var(--text-high);
-}
-
-.profile-form input:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: var(--bg-card);
-}
-
-/* ================= SAVED ITEMS / WISHLIST VIEW (REFINED) ================= */
-.saved-items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    padding-top: 1rem; /* Space below the H3 header */
-}
-
-.saved-item {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.8rem;
-    border-radius: var(--radius-md);
-    background: var(--bg-card);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-soft);
-}
-
-.saved-item img {
-    width: 50px; 
-    height: 50px;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-    flex-shrink: 0;
-}
-
-.saved-item .item-info {
-    flex-grow: 1;
-}
-
-.saved-item .item-info h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-.saved-item .item-info p {
-    font-size: 0.9rem;
-    font-weight: 700;
+/* Slide-in indicator effect for Active state */
+.profile-menu-list li a.active {
+    background: rgba(233, 44, 64, 0.08);
     color: var(--primary);
 }
 
-/* Buttons in Saved Item Card */
-.add-to-cart-from-wishlist {
-    padding: 0.5rem 1rem; 
-    font-size: 0.85rem;
-    border-radius: var(--radius-sm);
-    text-transform: none;
-    flex-shrink: 0;
+.profile-menu-list li a.active::before {
+    width: 5px;
+    height: 60%;
+    top: 20%;
+    background: var(--primary);
+    box-shadow: 2px 0 8px rgba(233, 44, 64, 0.4);
 }
 
-.remove-from-wishlist {
-    background: var(--primary-dark);
-    color: #fff;
-    width: 30px; 
-    height: 30px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-}
+/* ================= CART REFINEMENT: PRODUCT FOCUS ================= */
 
-
-/* ================= FOOTER ================= */
-#profile-sidebar .sidebar-footer {
-    position: sticky;
-    bottom: 0;
-    flex-shrink: 0; 
-    
-    padding: 1.2rem 1.4rem;
-    border-top: 1px solid var(--border-soft);
-
-    background: var(--bg-card);
-    box-shadow: 0 -6px 18px rgba(0,0,0,.06);
-}
-
-#auth-action-btn {
-    width: 100%;
-    padding: .95rem;
-    font-weight: 800;
-    border-radius: var(--radius-md);
-}
-
-/* ================= ANIMATION ================= */
-@keyframes fadeSlide {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ================= ACCESSIBILITY ================= */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation: none !important;
-        transition: none !important;
-    }
-}
-
-/* ================= CART SIDEBAR (RETAINED) ================= */
-#cart-sidebar .sidebar-body { flex-grow: 1; overflow-y: auto; padding: 0; overscroll-behavior: contain; }
 .cart-item {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; 
-    border-bottom: 1px solid var(--border-soft); background: var(--bg-card);
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--border-soft);
+    transition: background 0.2s ease;
 }
-.item-details { display: flex; align-items: center; gap: 0.8rem; flex: 1 1 50%; }
-.item-details img { width: 60px; height: 60px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
-.qty-controls { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; font-weight: 700; line-height: 1; }
-.qty-controls button { width: 30px; height: 30px; border-radius: 50%; background: var(--bg-secondary); color: var(--primary); display: grid; place-items: center; transition: background 0.2s ease; }
-.qty-controls button:hover { background: var(--primary); color: #fff; }
-.item-total-price { min-width: 60px; text-align: right; font-size: 1rem; font-weight: 900; color: var(--primary-dark); margin-left: 0.5rem; }
 
+.cart-item:hover {
+    background: var(--bg-secondary);
+}
+
+.item-details img {
+    width: 70px; height: 70px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.qty-controls button {
+    width: 32px; height: 32px;
+    font-size: 1.1rem;
+    border: 1px solid var(--border-soft);
+    background: var(--bg-card);
+}
+
+.qty-controls button:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: scale(1.1);
+}
+
+/* Advanced Footer: Floating look */
 .sidebar-footer {
-    position: sticky; bottom: 0; z-index: 10; padding: 1.8rem 1.5rem; 
-    background: var(--bg-card); border-top: 1px solid var(--border-soft); 
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+    padding: 2rem 1.5rem;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-soft);
+    z-index: 10;
 }
-.cart-total-row { display: flex; justify-content: space-between; align-items: center; font-size: 1.4rem; font-weight: 900; margin-bottom: 1.2rem; color: var(--text-high); }
-.cart-total-label { font-size: 1rem; font-weight: 700; color: var(--text-main); }
+
 .cart-checkout-btn {
-    width: 100%; padding: 1.1rem 0; font-size: 1rem; font-weight: 800; text-transform: uppercase; 
-    border-radius: 14px; box-shadow: var(--shadow-md); transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 56px; /* Touch-friendly height */
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    background: linear-gradient(to right, var(--primary), var(--primary-dark));
+    border: none;
+    color: white;
 }
-.cart-checkout-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-strong); }
-.cart-checkout-btn:disabled { background: var(--text-low); box-shadow: none; cursor: not-allowed; transform: none; }
 
+/* ================= TOASTS: MOTION DESIGN ================= */
 
-/* ================= TOAST NOTIFICATIONS (RETAINED) ================= */
-#toast-container {
-    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; 
-    flex-direction: column; align-items: center; gap: 10px; z-index: 1200;
-}
 .toast {
-    background: var(--bg-card); color: var(--text-high); padding: 10px 20px; border-radius: var(--radius-md); 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); opacity: 0; visibility: hidden; transform: translateY(20px); 
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s; font-weight: 600; display: flex; 
-    align-items: center; gap: 8px; min-width: 250px; border-left: 4px solid;
-}
-.toast.visible { opacity: 1; visibility: visible; transform: translateY(0); }
-.toast.success { border-color: var(--accent); }
-.toast.success i { color: var(--accent); }
-.toast.error { border-color: var(--primary); }
-.toast.error i { color: var(--primary); }
-.toast.info { border-color: #3b82f6; }
-.toast.info i { color: #3b82f6; }
-
-
-/* ================= MOBILE ADAPTATION ================= */
-@media (max-width: 992px) {
-    /* Contact Section Stacking */
-    .contact-container { grid-template-columns: 1fr !important; margin-inline: 1.5rem !important; width: auto; }
-    .contact-container img { height: 300px !important; order: -1; }
-    .form-container { padding: 2.5rem 1.5rem; }
+    padding: 12px 24px;
+    border-radius: 50px; /* Pill shape */
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-@media (max-width: 768px) {
-    .sidebar { width: 90%; max-width: 380px; }
+/* Dark mode toast adjustment */
+body.dark-mode .toast {
+    background: rgba(30, 30, 30, 0.9);
+    color: white;
+}
+
+/* ================= RESPONSIVE ADJUSTMENTS ================= */
+
+@media (max-width: 480px) {
+    :root { --sidebar-width: 100%; }
     
-    /* Menu Topbar Stacking */
-    .menu-topbar { 
-        flex-direction: column; align-items: stretch; margin-bottom: 2rem; 
-        padding: 1.5rem; /* Simpler padding */
-    }
-    .menu-topbar .section-header { 
-        border-left: none; padding-left: 0; text-align: center; margin-bottom: 1rem; 
-    }
-    .menu-filter-container { flex: 1 1 100%; }
-    .menu-topbar::after { inset-inline: 1.5rem; }
-    
-    .navbar-container { padding-inline: 1rem; }
-    .hero-actions { flex-direction: column; }
-    .category-card { flex: 0 0 280px; } 
-    .menu-card { flex: 0 0 220px; } /* Slightly more compact for smaller screens */
-    
-    /* Category Header Fix (adjust offset) */
-    .category-header {
-        padding: 0.6rem 0; /* Resetting horizontal padding */
-        top: calc(var(--nav-height) + 12px + 76px); /* Approximation: Nav + Spacer + Topbar Height */
+    .sidebar {
+        border-radius: 0;
     }
     
-    /* Sidebar Footer Visibility */
-    .sidebar-footer {
-        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+    .profile-user-card {
+        margin: 1rem;
+        padding: 1.2rem;
     }
 }
