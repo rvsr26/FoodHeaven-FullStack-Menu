@@ -66,12 +66,7 @@ const showToast = (msg, type = 'success') => {
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 };
-
 // ================= FIREBASE AUTH UTILITIES =================
-
-/**
- * Helper function to create user initials for the avatar.
- */
 function generateInitials(displayName) {
     if (!displayName) return '?';
     const parts = displayName.split(' ').filter(p => p.length > 0); 
@@ -628,30 +623,27 @@ window.toggleProfile = (open) => {
         profileOverlay.classList.toggle('active', shouldOpen);
         
         if (shouldOpen) {
-            // 1️⃣ PROFILE REMEMBERS LAST TAB
-            const lastView = localStorage.getItem('profileLastView');
-            if (lastView) {
-                // Manually call switchProfileView via mock event to prevent navigation
-                const link = document.querySelector(`.profile-tab-link[data-view="${lastView}"]`);
-                if (link) {
-                    const mockEvent = { preventDefault: () => {}, currentTarget: link };
-                    switchProfileView(mockEvent);
-                }
-            } else {
-                 // Ensure the default active tab (Order History) is set
-                const defaultLink = document.querySelector(`.profile-tab-link.active`);
-                if (defaultLink) {
-                    const mockEvent = { preventDefault: () => {}, currentTarget: defaultLink };
-                    switchProfileView(mockEvent);
-                }
-            }
-            
-            // Render views that rely on local storage / state
-            renderWishlistView(wishlistManager.getSavedItemsDetails());
-            renderAddressView();
-            renderOrderHistory(); 
-        }
+
+    // ✅ FIX #4: Activate last or default tab
+    const lastTab =
+        localStorage.getItem('profileLastView') || 'order-history';
+
+    const defaultLink = document.querySelector(
+        `.profile-tab-link[data-view="${lastTab}"]`
+    );
+
+    if (defaultLink) {
+        defaultLink.click();
     }
+}
+
+    }
+};
+const initProfileTabs = () => {
+  const last = localStorage.getItem('profileLastView') || 'order-history';
+  document
+    .querySelector(`.profile-tab-link[data-view="${last}"]`)
+    ?.click();
 };
 
 /* ================= FIREBASE AUTH LOGIC ================= */
@@ -725,73 +717,96 @@ function handleLoginSignup() {
 
 const switchProfileView = (e) => {
     e.preventDefault();
-    const clickedLink = e.currentTarget;
-    const viewName = clickedLink.dataset.view; 
 
-    // 3️⃣ DISABLE PROFILE ACTIONS FOR GUEST USERS (Guard)
+    const clickedLink = e.currentTarget;
+    const viewName = clickedLink.dataset.view;
+
+    // 🚫 Guard FIRST (before touching UI)
     if (!currentUser && viewName !== 'order-history') {
         showToast('Please login to access this section', 'info');
         return;
     }
-    
-    // 1️⃣ PROFILE REMEMBERS LAST TAB
-    localStorage.setItem('profileLastView', viewName); 
 
-    qsa('.profile-tab-link').forEach(link => link.classList.remove('active'));
+    // 💾 Remember last tab
+    localStorage.setItem('profileLastView', viewName);
+
+    // 🔄 Update tab UI
+    qsa('.profile-tab-link').forEach(link =>
+        link.classList.remove('active')
+    );
     clickedLink.classList.add('active');
 
-    qsa('.profile-view').forEach(view => view.classList.remove('active'));
-    
-    const targetView = qs(viewName);
-    if (targetView) {
-        targetView.classList.add('active');
-        
-        // Re-render specific dynamic views
-        if (viewName === 'saved-items') {
+    // 🔄 Switch views
+    qsa('.profile-view').forEach(view =>
+        view.classList.remove('active')
+    );
+
+    // ✅ FIX: proper selector
+    const targetView = document.getElementById(viewName);
+    if (!targetView) {
+        console.error(`Profile view not found: #${viewName}`);
+        return;
+    }
+
+    targetView.classList.add('active');
+
+    // 🔁 Render dynamic content
+    switch (viewName) {
+        case 'saved-items':
             renderWishlistView(wishlistManager.getSavedItemsDetails());
-        }
-        if (viewName === 'address-book') {
+            break;
+        case 'address-book':
             renderAddressView();
-        }
-        if (viewName === 'order-history') {
+            break;
+        case 'order-history':
             renderOrderHistory();
-        }
+            break;
     }
 };
 
 const setupProfileTabs = () => {
+    // 🔗 Tab clicks
     qsa('.profile-tab-link').forEach(link => {
+        link.removeEventListener('click', switchProfileView);
         link.addEventListener('click', switchProfileView);
     });
 
-    // Handle form submissions within the profile views
+    // 📝 Form handling (SAFE)
     qsa('.profile-form').forEach(form => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const formId = form.closest('.profile-view').id;
-            
+
             if (!currentUser) {
-                showToast('Action failed: Must be logged in.', 'error');
+                showToast('Please login first', 'error');
                 return;
             }
-            
-            if (formId === 'address-book') {
-                // 4️⃣ REAL ADDRESS SAVE (LOCAL STORAGE MINIMUM)
+
+            const view = form.closest('.profile-view')?.id;
+
+            if (view === 'address-book') {
                 saveAddress({
-                    street: qs('address-street').value,
-                    city: qs('address-city').value
+                    street: qs('address-street')?.value.trim(),
+                    city: qs('address-city')?.value.trim()
                 });
                 renderAddressView();
-                showToast('New address saved!', 'success');
+                showToast('Address saved!', 'success');
                 form.reset();
-            } else if (formId === 'account-settings') {
+            }
+
+            else if (view === 'account-settings') {
                 showToast('Profile updated successfully!', 'success');
-            } else {
-                showToast('Form submitted (Placeholder)', 'info');
             }
         });
     });
+
+    // ⭐ Activate default tab
+    const lastTab = localStorage.getItem('profileLastView') || 'order-history';
+    const defaultLink = q(`.profile-tab-link[data-view="${lastTab}"]`);
+    if (defaultLink) {
+        defaultLink.click();
+    }
 };
+
 
 /* ================= SEARCH/FILTER ================= */
 
@@ -859,7 +874,8 @@ const performSmoothScroll = () => {
 
 
 const setupCategoryAutoScroll = () => {
-    scrollContainer = q('.horizontal-scroll-container .category-list-horizontal')?.parentElement;
+    scrollContainer = document.querySelector('.horizontal-scroll-container');
+
     
     if (!scrollContainer) {
         return;
@@ -901,38 +917,6 @@ const setupCategoryAutoScroll = () => {
 
 // --- Sticky Nav Highlight (NEW LOGIC for the secondary-nav-link) ---
 
-const updateStickyNavHighlight = () => {
-    const menuLinks = qsa('.secondary-nav-link');
-    
-    // Find all menu sections (the targets of the links)
-    const sections = qsa('.category-block .category-header');
-    
-    // Define the offset (below the main navbar and the sticky menu-topbar)
-    // CRITICAL: Must be greater than the combined height of sticky elements
-    const OFFSET = 150; 
-
-    let activeCategory = null;
-
-    // Iterate in reverse to find the last section that has scrolled past the OFFSET line
-    for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
-        const rect = section.getBoundingClientRect();
-
-        // Check if the section's top edge is above the OFFSET line (i.e., it's currently active/visible)
-        if (rect.top <= OFFSET) {
-            activeCategory = section.id;
-            break;
-        }
-    }
-
-    // Apply the active class to the corresponding link
-    menuLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').substring(1) === activeCategory) {
-            link.classList.add('active');
-        }
-    });
-};
 
 /* ================= INIT ================= */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1038,3 +1022,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+const updateStickyNavHighlight = () => {
+  const links = qsa('.secondary-nav-link');
+  const sections = qsa('.category-header');
+
+  const navbar = document.querySelector('.navbar')?.offsetHeight || 0;
+  const topbar = document.querySelector('.menu-topbar')?.offsetHeight || 0;
+  const OFFSET = navbar + topbar + 10;
+
+  let activeId = null;
+
+  for (let i = sections.length - 1; i >= 0; i--) {
+    if (sections[i].getBoundingClientRect().top <= OFFSET) {
+      activeId = sections[i].id;
+      break;
+    }
+  }
+
+  links.forEach(link => {
+    link.classList.toggle(
+      'active',
+      link.getAttribute('href') === `#${activeId}`
+    );
+  });
+};
